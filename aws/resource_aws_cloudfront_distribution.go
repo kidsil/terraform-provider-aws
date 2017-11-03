@@ -590,7 +590,7 @@ func resourceAwsCloudFrontDistribution() *schema.Resource {
 			},
 			"restrictions": {
 				Type:     schema.TypeSet,
-				Required: true,
+				Optional: true,
 				Set:      restrictionsHash,
 				MaxItems: 1,
 				Elem: &schema.Resource{
