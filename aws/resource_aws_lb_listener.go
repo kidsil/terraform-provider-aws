@@ -634,6 +634,33 @@ func resourceAwsLbListenerRead(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
+func resourceAwsLbListenerRefreshFunc(conn *elbv2.ELBV2, id string) resource.StateRefreshFunc {
+	return func() (interface{}, string, error) {
+		resp, err := conn.DescribeListeners(&elbv2.DescribeListenersInput{
+			ListenerArns: []*string{aws.String(id)},
+		})
+		if err != nil {
+			if isAWSErr(err, elbv2.ErrCodeListenerNotFoundException, "") {
+				resp = nil
+				err = nil
+			} else {
+				return nil, "", fmt.Errorf("Error retrieving Listener: %s", err)
+			}
+		}
+
+		if resp == nil {
+			return nil, "", nil
+		}
+
+		if len(resp.Listeners) != 1 {
+			return nil, "", fmt.Errorf("Error retrieving Listener %q (expected 1, got %d)",
+				id, len(resp.Listeners))
+		}
+
+		return resp.Listeners[0], "exists", nil
+	}
+}
+
 func resourceAwsLbListenerUpdate(d *schema.ResourceData, meta interface{}) error {
 	elbconn := meta.(*AWSClient).elbv2conn
 
