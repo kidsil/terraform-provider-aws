@@ -3,10 +3,19 @@
 FEATURES:
 
 * **New Data Source:** `aws_launch_configuration` [GH-3624]
+* **New Resource:** `aws_s3_bucket_inventory` [GH-5019]
 
 ENHANCEMENTS:
 
+* data-source/aws_route_tables: Add `filter` argument [GH-5035]
 * resource/aws_eip_association: Support resource import [GH-5006]
+* resource/aws_network_acl_rule: Add plan time conflict validation with `cidr_block` and `ipv6_cidr_block` [GH-3951]
+* resource/aws_spot_fleet_request: Add `fleet_type` argument [GH-5032]
+* resource/aws_ssm_document: Add `tags` argument (support tagging) [GH-5020]
+
+BUG FIXES:
+
+* resource/aws_kms_alias: Fix perpetual plan when `target_key_id` is ARN [GH-4010]
 
 ## 1.25.0 (June 27, 2018)
 
